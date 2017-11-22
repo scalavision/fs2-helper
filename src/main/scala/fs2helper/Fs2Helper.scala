@@ -12,35 +12,35 @@ import fs2._
 
 object Fs2Helper {
 
-  implicit val EC : ExecutionContext = 
+  implicit val ec : ExecutionContext = 
       ExecutionContext.fromExecutor(
         Executors.newFixedThreadPool(
-          8, mkThreadFactory("fs2-http-spec-ec", daemon = true
+          8, threadFactory("ExecutionContext", daemon = true
       )))
 
-  implicit val Sch : Scheduler = 
+  implicit val scheduler : Scheduler = 
     Scheduler.fromScheduledExecutorService(
       Executors.newScheduledThreadPool(
-        4, mkThreadFactory("fs2-http-spec-scheduler", daemon = true
+        4, threadFactory("Scheduler", daemon = true
     )))
 
-  implicit val AG: AsynchronousChannelGroup = 
+  implicit val asynchChannelGroup: AsynchronousChannelGroup = 
     AsynchronousChannelGroup.withThreadPool(
       Executors.newCachedThreadPool(
-        mkThreadFactory("fs2-http-spec-AG", daemon = true
+        threadFactory("AsynchChannelGroup", daemon = true
     )))
 
 
-  /** helper to create named daemon thread factories **/
-  def mkThreadFactory(name: String, daemon: Boolean, exitJvmOnFatalError: Boolean = true): ThreadFactory = {
+  
+  def threadFactory(name: String, daemon: Boolean, exitJvmOnFatalError: Boolean = true): ThreadFactory = {
     new ThreadFactory {
       val idx = new AtomicInteger(0)
       val defaultFactory = Executors.defaultThreadFactory()
       def newThread(r: Runnable): Thread = {
-        val t = defaultFactory.newThread(r)
-        t.setName(s"$name-${idx.incrementAndGet()}")
-        t.setDaemon(daemon)
-        t.setUncaughtExceptionHandler(new UncaughtExceptionHandler {
+        val thread = defaultFactory.newThread(r)
+        thread.setName(s"$name_${idx.incrementAndGet()}")
+        thread.setDaemon(daemon)
+        thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler {
           def uncaughtException(t: Thread, e: Throwable): Unit = {
             ExecutionContext.defaultReporter(e)
             if (exitJvmOnFatalError) {
@@ -51,7 +51,7 @@ object Fs2Helper {
             }
           }
         })
-        t
+        thread
       }
     }
   }
