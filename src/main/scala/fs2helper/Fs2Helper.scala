@@ -38,7 +38,7 @@ object Fs2Helper {
       val defaultFactory = Executors.defaultThreadFactory()
       def newThread(r: Runnable): Thread = {
         val thread = defaultFactory.newThread(r)
-        thread.setName(s"$name_${idx.incrementAndGet()}")
+        thread.setName(s"${name}_${idx.incrementAndGet()}")
         thread.setDaemon(daemon)
         thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler {
           def uncaughtException(t: Thread, e: Throwable): Unit = {
