@@ -56,5 +56,13 @@ object Fs2Helper {
     }
   }
 
+  def shutdown(): Unit = {
+    println("shutting down!")
+    AG.shutdownNow()
+    println("awaiting termination ....")
+    AG.awaitTermination(10, TimeUnit.SECONDS)
+    println("has shutdown: " + AG.isShutdown())
+    println("has terminated: " + AG.isTerminated())
+  }
 
 }
