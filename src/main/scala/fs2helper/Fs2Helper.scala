@@ -1,7 +1,7 @@
 package fs2helper
 
 import java.lang.Thread.UncaughtExceptionHandler
-import java.util.concurrent.{Executors, ThreadFactory}
+import java.util.concurrent.{Executors, ThreadFactory, TimeUnit}
 import java.util.concurrent.atomic.AtomicInteger
 import java.nio.channels.AsynchronousChannelGroup
 
@@ -58,11 +58,11 @@ object Fs2Helper {
 
   def shutdown(): Unit = {
     println("shutting down!")
-    AG.shutdownNow()
+    asynchChannelGroup.shutdownNow()
     println("awaiting termination ....")
-    AG.awaitTermination(10, TimeUnit.SECONDS)
-    println("has shutdown: " + AG.isShutdown())
-    println("has terminated: " + AG.isTerminated())
+    asynchChannelGroupAG.awaitTermination(10, TimeUnit.SECONDS)
+    println("has shutdown: " + asynchChannelGroup.isShutdown())
+    println("has terminated: " + asynchChannelGroup.isTerminated())
   }
 
 }
