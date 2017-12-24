@@ -58,6 +58,10 @@ object Fs2Helper {
     }
   }
 
+  def log[A](prefix: String): Pipe[IO, A, A] = _.evalMap { m =>
+    IO { println(s"$prefix > $m" ); m }
+  }
+
   def randomDelays[A](max: FiniteDuration): Pipe[IO, A, A] = _.flatMap { m =>
     val randomDelay = scala.util.Random.nextInt(max.toMillis.toInt) / 1000.0
     println(s"delay: $randomDelay")
