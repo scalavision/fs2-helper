@@ -9,6 +9,8 @@ import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
 import fs2._
+import cats.effect.IO
+import scala.concurrent.duration._
 
 object Fs2Helper {
 
@@ -18,13 +20,13 @@ object Fs2Helper {
           8, threadFactory("ExecutionContext", daemon = true
       )))
 
-  implicit val scheduler : Scheduler = 
+  implicit val sch : Scheduler = 
     Scheduler.fromScheduledExecutorService(
       Executors.newScheduledThreadPool(
         4, threadFactory("Scheduler", daemon = true
     )))
 
-  implicit val asynchChannelGroup: AsynchronousChannelGroup = 
+  implicit val acg: AsynchronousChannelGroup = 
     AsynchronousChannelGroup.withThreadPool(
       Executors.newCachedThreadPool(
         threadFactory("AsynchChannelGroup", daemon = true
@@ -56,13 +58,19 @@ object Fs2Helper {
     }
   }
 
+  def randomDelays[A](max: FiniteDuration): Pipe[IO, A, A] = _.flatMap { m =>
+    val randomDelay = scala.util.Random.nextInt(max.toMillis.toInt) / 1000.0
+    println(s"delay: $randomDelay")
+    sch.delay(Stream.eval(IO(m)), randomDelay.seconds)
+  }
+
   def shutdown(): Unit = {
     println("shutting down!")
-    asynchChannelGroup.shutdownNow()
+    acg.shutdownNow()
     println("awaiting termination ....")
-    asynchChannelGroupAG.awaitTermination(10, TimeUnit.SECONDS)
-    println("has shutdown: " + asynchChannelGroup.isShutdown())
-    println("has terminated: " + asynchChannelGroup.isTerminated())
+    acg.awaitTermination(10, TimeUnit.SECONDS)
+    println("has shutdown: " + acg.isShutdown())
+    println("has terminated: " + acg.isTerminated())
   }
 
 }
