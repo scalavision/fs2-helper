@@ -7,6 +7,7 @@ import java.nio.channels.AsynchronousChannelGroup
 
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
+import java.util.concurrent.TimeUnit
 
 import fs2._
 import cats.effect.IO

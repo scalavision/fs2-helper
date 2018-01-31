@@ -21,7 +21,7 @@ import scala.concurrent.ExecutionContext
   **/
 
 @SuppressWarnings(Array("org.wartremover.warts.DefaultArguments"))
-object zip {
+object zip { /*
   def zipP[F[_]](chunkSize: Int = chunkSize)(implicit
     F: Effect[F],
     ec: ExecutionContext
@@ -144,4 +144,5 @@ object zip {
              ec: ExecutionContext
   ): Stream[F, (String, Stream[F, Byte])] =
     zipped.through(unzipP(chunkSize))
+    */
 }
