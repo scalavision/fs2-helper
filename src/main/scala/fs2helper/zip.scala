@@ -22,6 +22,11 @@ import scala.concurrent.ExecutionContext
 
 @SuppressWarnings(Array("org.wartremover.warts.DefaultArguments"))
 object zip { /*
+=======
+object zip {
+
+  val chunkSize = 1024
+
   def zipP[F[_]](chunkSize: Int = chunkSize)(implicit
     F: Effect[F],
     ec: ExecutionContext
@@ -53,7 +58,7 @@ object zip { /*
             // `None` terminates the queue
             @SuppressWarnings(Array("org.wartremover.warts.Throw"))
             private def enqueueChunkSync(a: Option[Vector[Byte]]) = {
-              q.enqueue1(a).to[IO].unsafeRunSync
+//              q.enqueue1(a).to[IO].unsafeRunSync
             }
 
             @scala.annotation.tailrec
