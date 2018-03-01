@@ -78,4 +78,6 @@ object Fs2Helper {
     println("has terminated: " + acg.isTerminated())
   }
 
+  val s = Stream.fromIterator _
+
 }
