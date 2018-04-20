@@ -5,11 +5,6 @@ scalaVersion := "2.12.5"
 organization := "scalavision"
 
 libraryDependencies ++= Seq(
-<<<<<<< HEAD
-  "co.fs2" %% "fs2-core" % "0.10.2",
-  "co.fs2" %% "fs2-io" % "0.10.2"
-=======
   "co.fs2" %% "fs2-core" % "0.10.3",
   "co.fs2" %% "fs2-io" % "0.10.3"
->>>>>>> updating
 )
