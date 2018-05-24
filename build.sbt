@@ -10,3 +10,5 @@ libraryDependencies ++= Seq(
   "co.fs2" %% "fs2-core" % "0.10.4",
   "co.fs2" %% "fs2-io" % "0.10.4"
 )
+
+assemblyJarName in assembly := "fs2helper.jar"
