@@ -21,11 +21,14 @@ object Fs2Helper {
           8, threadFactory("ExecutionContext", daemon = true
       )))
 
+  //val sch: Stream[IO, Scheduler] = Stream.emit(Scheduler.default)
+
+  /*
   implicit val sch : Scheduler = 
     Scheduler.fromScheduledExecutorService(
       Executors.newScheduledThreadPool(
         4, threadFactory("Scheduler", daemon = true
-    )))
+    )))*/
 
   implicit val acg: AsynchronousChannelGroup = 
     AsynchronousChannelGroup.withThreadPool(
@@ -63,10 +66,14 @@ object Fs2Helper {
     IO { println(s"$prefix > $m" ); m }
   }
 
+  //TODO: test this, probably way off ...
   def randomDelays[A](max: FiniteDuration): Pipe[IO, A, A] = _.flatMap { m =>
     val randomDelay = scala.util.Random.nextInt(max.toMillis.toInt) / 1000.0
+
     println(s"delay: $randomDelay")
-    sch.delay(Stream.eval(IO(m)), randomDelay.seconds)
+    //Stream.eval(IO.delay(randomDelay.seconds).map { a => m } )
+    Stream.eval(IO { Thread.sleep(scala.util.Random.nextLong) }.map { a => m } )
+
   }
 
   def shutdown(): Unit = {
